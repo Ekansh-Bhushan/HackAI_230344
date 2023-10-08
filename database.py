@@ -9,9 +9,9 @@ Secure connection established.\n\n\n\n""")
 
 mydb = my.connect(host='localhost', user='root', passwd='password', autocommit=True)
 mycursor = mydb.cursor()
-mycursor.execute("Create Database if not exists USER")
+mycursor.execute("Create Database if not exists HackAI")
 print("CHECKING AND CREATING DATABASE...")
-mycursor.execute("use USER")
+mycursor.execute("use HackAI")
 print("DATABASE CREATED AND CHECKED SUCCESSFULLY.\n\n\n\n\n\n\n")
 
 SEED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_1234567890#"
@@ -81,44 +81,10 @@ def get_dob():
             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
 
-# def get_admn_date():
-#     while True:
-#         date = input("Enter The Date Of Admission (dd-mm-yyyy) : ")
-#         if is_validate_date(date):
-#             day, month, year = [int(field) for field in date.split("-")]
-#             try:
-#                 date = datetime(year, month, day)
-#                 if date > datetime.today():
-#                     raise ValueError
-#                 return date
-                
-#             except ValueError:
-#                 print("The Date You Entered Doesn't Exist, Try That Again...")
-#             print(type(date))    
-#         else:
-#             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
-
-
-# def get_discharge_date(doa):
-#     doa = datetime(doa.year,doa.month,doa.day)
-#     while True:
-#         date = input("Enter The Date Of Discharge (dd-mm-yyyy) : ")
-#         if is_validate_date(date):
-#             day, month, year = [int(field) for field in date.split("-")]
-#             try:
-#                 date = datetime(year, month, day)
-#                 if date > datetime.today() or date < doa:
-#                     raise ValueError
-#                 return date
-#             except ValueError:
-#                 print("The Date You Entered Doesn't Exist, Try That Again...")
-#             print(type(date))
-#         else:
-#             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 #----------------------------------------------------------i checked till here as of now ------------------------------
 
-def del_rec(pid):
-    query = f"select * from admit_patients where id  = '{pid}'"
+def del_user(pid):
+    query = f"select * from user where id  = '{pid}'"
     mycursor.execute(query)
     myrecords = mycursor.fetchall()
     if mycursor.rowcount != 0:
@@ -212,74 +178,6 @@ def admit():
 
     # displaying contents of the table
 
-
-def num_of_days(doa, dod):
-    date1 = datetime.strptime(doa.strftime("%Y-%m-%d"), "%Y-%m-%d")
-    date2 = datetime.strptime(dod.strftime("%Y-%m-%d"), "%Y-%m-%d")
-    days = date2 - date1
-    return days.days
-
-    
-def discharge():
-    try:
-        while True:
-            pid = input("Enter The Patient's ID  :  ")
-            query = f"select * from admit_patients where ID = '{pid}'"
-            mycursor.execute(query)
-            myrecords = mycursor.fetchall()
-            rc = mycursor.rowcount
-            if rc != 0:
-                for x in myrecords:
-                    name = x[1]
-                    age = x[2]
-                    gender = x[3]
-                    weight = x[4]
-                    doa = x[5]
-                    ill = x[6]
-                    consultant = x[7]
-                    dia = x[8]
-                    dod = get_discharge_date(doa)
-                    rea = input('Enter The Remark On The Discharge : ')
-                    con = input('Enter the condition of the patient  :  ')
-                query = f""" insert into discharge_patients values ('{pid}','{name}',{age},'{gender}','{rea}','{ill}',
-                '{dia}','{con}','{consultant}','{doa}','{dod}')"""  # creating table
-                mycursor.execute(query)
-
-                nod = num_of_days(doa, dod)
-                room_charge = float(input('Enter The Room Charge Per Day  :  ')) * nod
-                price_med = float(input('Enter The Total Price Of Medications Recieved  :  '))
-                doctor_fee = float(input("Enter The Total Doctors' Fee  :  "))
-                test_fee = float(input('Enter The Total Amount Of The Tests Done :  '))
-                total = room_charge + price_med + doctor_fee + test_fee
-                discount = float(input('Enter the discount applied  :  '))
-                total_amo = total - (total * (discount / 100))
-
-                print('DISCHARGE SUMMARY'.center(100))  # displaying!
-
-                print( """ NAME  :   {name}                     AGE : {age}                     GENDER : {gender}         
-CONSULTANT DOCTOR : {consultant}                  
-WEIGHT : {weight}kg                     D.O.A : {doa}                       DATED : {dod}
-    SUMMARY  
-    The Patient, {name} was admitted in the hospital on {doa} due to {ill}, according to various 
-    reports, under the doctor {consultant}.
-    He/She has been discharged on {dod} because of {rea}. The condition of the patient is {con}. 
-    The patient is advised to follow regularly the post discharge medication procedures as told by 
-    the doctor or else, it may lead from mild to severe consequences. 
-+--------------------------------------------------------------------+
-|                                  BILL                              |
-+--------------------------------------------------------------------+""")
-                
-                ne = [['Room Charge',room_charge],['Total Price of Medication',price_med],['Doctors\' Fee',doctor_fee],['Total Amount of the Tests Done',test_fee],['Discount Applied',discount],['Total Payable Amount',total]]
-                print(tabulate( ne,tablefmt = 'fancy_grid' ))
-                del_rec(pid)
-
-                ans = input('Want To Enter More? (Y/N) :  ')
-                if ans in 'Nn':
-                    break
-            else:
-                print('Patient Was Not Found')
-    except Exception as e:
-        print(e)
 
 
 def display_staff():
