@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
+from datetime import datetime, date
 
 # Function to send email alerts
 def send_email_alert(receiver_email, subject, message):
@@ -12,25 +13,26 @@ def send_email_alert(receiver_email, subject, message):
     smtp_password = input("Enter your password:")
     smtp_dob=input("Enter The dob (dd-mm-yyyy) : ")
     def is_validate_date(smtp_dob):
-    fields = smtp_dob.split("-")
-    contains_all_fields = len(fields) == 3
-    all_fields_are_integers = all([field.isdigit() for field in fields])
-    return contains_all_fields and all_fields_are_integers
+        fields = smtp_dob.split("-")
+        contains_all_fields = len(fields) == 3
+        all_fields_are_integers = all([field.isdigit() for field in fields])
+        return contains_all_fields and all_fields_are_integers
 
 
-def get_dob():
-    while True:
-        if is_validate_date(smtp_dob):
-            day, month, year = [int(field) for field in date.split("-")]
-            try:
-                smtp_dob = datetime(year, month, day)
-                if smtp_dob > datetime.today():
-                    raise ValueError
-                return smtp_dob
-            except ValueError:
-                print("The Date You Entered Doesn't Exists, Or it is grater than today. Try That Again...")
-        else:
-            print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
+
+    def get_dob():
+        while True:
+            if is_validate_date(smtp_dob):
+                day, month, year = [int(field) for field in date.split("-")]
+                try:
+                    smtp_dob = datetime(year, month, day)
+                    if smtp_dob > datetime.today():
+                        raise ValueError
+                    return smtp_dob
+                except ValueError:
+                    print("The Date You Entered Doesn't Exists, Or it is grater than today. Try That Again...")
+            else:
+                print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
     
     # Create a connection to the SMTP server
@@ -119,5 +121,4 @@ if __name__ == '__main__':
     foreign_currency = 'EUR'
     current_rate = 1.19  # Replace with the actual exchange rate
     alert_threshold = 1.20  # Set the threshold for the alert
-    
     check_and_send_alerts(base_currency, foreign_currency, current_rate, alert_threshold)
