@@ -14,9 +14,11 @@ class Currency:
         res = requests.get(self.url)
         if res.status_code == 200:
             self.output = res.json()
-            # print(self.output['rates']['GBP'])
+            # print(self.output['rates']['USD'])
             print(self.output)
 
+    def write_to_file(self):
+        print()
 
 c = Currency()
 c.do_request()
