@@ -6,7 +6,7 @@ authors = ["Ekansh <ekanshbhushan2k22@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11"
 requests = "^2.31.0"
 user-agents = "^2.2.0"
 mysql-connector-python = "^8.1.0"
