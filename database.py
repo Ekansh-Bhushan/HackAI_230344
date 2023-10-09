@@ -3,6 +3,8 @@ from datetime import datetime, date
 from random import choice as r_c
 import mysql.connector as my
 from tabulate import tabulate
+from forex_python.converter import CurrencyRates
+import time
 
 
 print("""Connecting to the server...
@@ -83,6 +85,79 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def currency_converter():
+    c = CurrencyRates()
+    
+    base_currency = "EUR"  # Fixed base currency
+    amount = float(input(f"Enter the amount in {base_currency}: "))
+
+    print("Available foreign currencies:")
+    foreign_currencies = input("Enter foreign currencies to convert to (comma-separated, e.g., USD,GBP): ").upper().split(',')
+
+    converted_amounts = {}
+    
+    for foreign_currency in foreign_currencies:
+        foreign_currency = foreign_currency.strip()
+        if foreign_currency in c.get_rates(base_currency):
+            converted_amount = c.convert(base_currency, foreign_currency, amount)
+            converted_amounts[foreign_currency] = converted_amount
+        else:
+            print(f"Skipping invalid currency: {foreign_currency}")
+
+    if converted_amounts:
+        print(f"{amount} {base_currency} is equal to:")
+        for foreign_currency, converted_amount in converted_amounts.items():
+            print(f"{converted_amount:.2f} {foreign_currency}")
+    else:
+        print("No valid foreign currencies provided.")
+
+if __name__ == "__main__":
+    currency_converter()
+
+
+
+def set_currency_thresholds():
+    c = CurrencyRates()
+
+    # Get the list of available foreign currencies
+    base_currency = "EUR"  # Fixed base currency
+    available_currencies = list(c.get_rates(base_currency).keys())
+
+    # Initialize a dictionary to store currency thresholds
+    currency_thresholds = {}
+
+    # Allow the user to input thresholds for multiple foreign currencies
+    print("Available foreign currencies:")
+    for i, currency in enumerate(available_currencies):
+        print(f"{i + 1}. {currency}")
+    
+    while True:
+        try:
+            currency_index = int(input("Enter the number corresponding to the currency (0 to finish): "))
+            if currency_index == 0:
+                break
+            if currency_index < 1 or currency_index > len(available_currencies):
+                print("Invalid choice. Please enter a valid number.")
+                continue
+            currency = available_currencies[currency_index - 1]
+            threshold = float(input(f"Enter the threshold value for {currency}: "))
+            currency_thresholds[currency] = threshold
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+    # Poll exchange rates and send alerts
+    while True:
+        for currency, threshold in currency_thresholds.items():
+            current_rate = c.get_rate(base_currency, currency)
+            print(f"Current exchange rate for {currency}: {current_rate:.2f}")
+            if current_rate > threshold:
+                print(f"ALERT: Exchange rate for {currency} has surpassed the threshold of {threshold}")
+        time.sleep(60)  # Poll every minute
+
+if __name__ == "__main__":
+    set_currency_thresholds()
+
 '''This code defines three functions (is_valid_username, is_valid_password, and is_valid_email) to 
 check the validity of the username, password, and email using regular expressions. 
 The main function takes user input for these three fields and checks their validity. 
