@@ -21,9 +21,10 @@ class Currency:
     def write_to_file(self):
         tday = datetime.now().strftime('%Y-%m-%d')
         temp_dict = {tday: self.output}
-        with open(f"daily_price/{self.file_name}", 'w') as f :
+        with open(f"daily_price/{self.file_name}.txt", 'w') as f :
             json.dump(temp_dict, f)
         # print(self)
 
 c = Currency()
 c.do_request()
+c.write_to_file()
