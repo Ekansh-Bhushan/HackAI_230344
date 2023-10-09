@@ -29,25 +29,57 @@ def random_id():
 
 def is_valid_username(username):
     # Username should contain only letters, numbers, underscores, or hyphens
-    return re.match(r'^[a-zA-Z0-9_-]+$', username) is not None
+    if re.match(r'^[a-zA-Z0-9_-]+$', username):
+        return True
+    else:
+        print("Invalid username. It should contain only letters, numbers, underscores, or hyphens.")
+        return False
+
 
 def is_valid_password(password):
     # Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit
-    return re.match(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$', password) is not None
+    if re.match(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$', password):
+        return True
+    else:
+        print("Invalid password. It should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.")
+        return False
+
 
 def is_valid_email(email):
     # Basic email validation using a simple regular expression
-    return re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email) is not None
+    if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return True
+    else:
+        print("Invalid email address. Please enter a valid email address.")
+        return False
+
+
+def get_dob():
+    while True:
+        date = input("Enter The dob (dd-mm-yyyy) : ")
+        if is_validate_date(date):
+            day, month, year = [int(field) for field in date.split("-")]
+            try:
+                date = datetime(year, month, day)
+                if date > datetime.today():
+                    raise ValueError
+                return date
+            except ValueError:
+                print("The Date You Entered Doesn't Exists, Or it is grater than today. Try That Again...")
+        else:
+            print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
+
 
 def main():
     username = input("Enter a username: ")
     password = input("Enter a password: ")
     email = input("Enter an email address: ")
+    dob = input("Enter your date of birth (YYYY-MM-DD): ")
 
-    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email):
+    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email) and is_valid_dob(dob):
         print("Valid input.")
     else:
-        print("Invalid input. Please check your username, password, and email.")
+        print("Invalid input. Please check your details and try again.")
 
 if __name__ == "__main__":
     main()
@@ -75,28 +107,6 @@ If all fields are valid, it prints "Valid input." Otherwise, it prints "Invalid 
 #         else:
 #             print('The Gender Is Not Valid.')
 
-
-def is_validate_date(date):
-    fields = date.split("-")
-    contains_all_fields = len(fields) == 3
-    all_fields_are_integers = all([field.isdigit() for field in fields])
-    return contains_all_fields and all_fields_are_integers
-
-
-def get_dob():
-    while True:
-        date = input("Enter The dob (dd-mm-yyyy) : ")
-        if is_validate_date(date):
-            day, month, year = [int(field) for field in date.split("-")]
-            try:
-                date = datetime(year, month, day)
-                if date > datetime.today():
-                    raise ValueError
-                return date
-            except ValueError:
-                print("The Date You Entered Doesn't Exists, Or it is grater than today. Try That Again...")
-        else:
-            print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
 
 #----------------------------------------------------------i checked till here as of now ------------------------------
