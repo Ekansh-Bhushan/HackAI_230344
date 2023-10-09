@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, date
 from random import choice as r_c
 import mysql.connector as my
@@ -26,22 +27,39 @@ def random_id():
         buffer += r_c(SEED)
     return buffer
 
+def is_valid_username(username):
+    # Username should contain only letters, numbers, underscores, or hyphens
+    return re.match(r'^[a-zA-Z0-9_-]+$', username) is not None
 
-def is_valid_name(name):
-    is_valid = True
-    for letter in name:
-        if not (letter.isalpha() or letter.isspace()):
-            is_valid = False
-    return is_valid
+def is_valid_password(password):
+    # Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit
+    return re.match(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$', password) is not None
+
+def is_valid_email(email):
+    # Basic email validation using a simple regular expression
+    return re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email) is not None
+
+def main():
+    username = input("Enter a username: ")
+    password = input("Enter a password: ")
+    email = input("Enter an email address: ")
+
+    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email):
+        print("Valid input.")
+    else:
+        print("Invalid input. Please check your username, password, and email.")
+
+if __name__ == "__main__":
+    main()
+'''This code defines three functions (is_valid_username, is_valid_password, and is_valid_email) to 
+check the validity of the username, password, and email using regular expressions. 
+The main function takes user input for these three fields and checks their validity. 
+If all fields are valid, it prints "Valid input." Otherwise, it prints "Invalid input."'''
 
 
-def get_user_name():
-    while True:
-        name = input("Enter The Name Of The User :  ").title()
-        if is_valid_name(name):
-            return name
-        else:
-            print("That Name Isn't Valid, Names Can Only Contain Letters And Spaces. \nTry Again...")
+
+
+
 
 
 # def is_valid_gender(gender):

@@ -25,7 +25,7 @@ async def inyterval(cyx: Context):
     if not started:
         await ctx.send(restaurant.address,QueryTableRequest(table_number=42))
     ctx.storage.set("started",True)
-@customer.on_message(QueryTableRespinse,replies=BookTbleRequest)
+@customer.on_message(QueryTableRespinse,replies=BookTableRequest)
 async def handle_query_response(ctx: Context,sender: str,msg: QueryTableRequest):
     if msg.status==TableStatus.FREE:
         ctx.logger.info("Table is free, attempting to book it now")
