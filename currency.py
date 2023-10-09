@@ -13,12 +13,17 @@ class Currency:
     def do_request(self):
         res = requests.get(self.url)
         if res.status_code == 200:
-            self.output = res.json()
+            res_json = res.json()
+            self.output = res_json['rates']['USD']
             # print(self.output['rates']['USD'])
             print(self.output)
 
     def write_to_file(self):
-        print()
+        tday = datetime.now().strftime('%Y-%m-%d')
+        temp_dict = {tday: self.output}
+        with open(f"daily_price/{self.file_name}", 'w') as f :
+            json.dump(temp_dict, f)
+        # print(self)
 
 c = Currency()
 c.do_request()
