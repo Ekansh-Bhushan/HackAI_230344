@@ -103,17 +103,46 @@ def get_dob():
         else:
             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
-# opening the CSV file
-with open('C:/Users/Ekansh/code/HackAI/exchange_rates.csv', mode ='r')as file:
-   
-  # reading the CSV file
-  csvFile = csv.reader(file)
-  dicti ={}
-  # displaying the contents of the CSV file
-  for lines in csvFile:
+# Opening the CSV file and reading its contents into a dictionary
+dicti = {}
+with open('C:/Users/Ekansh/code/HackAI/exchange_rates.csv', mode='r') as file:
+    csvFile = csv.reader(file)
+    for lines in csvFile:
         acronym = lines[0].strip()  # Assuming acronyms are in the first column
         full_form = lines[1].strip()  # Assuming full forms are in the second column
-        dicti[acronym]=full_form
+        dicti[acronym] = full_form
+
+def is_valid_currency_name(currency_name):
+    # Check if the currency code is in the dictionary
+    return currency_name in dicti
+
+def get_currency_key(currency_name):
+    # Return the key (acronym) for a given currency value
+    for key, value in dicti.items():
+        if value == currency_name:
+            return key
+    return None
+
+def add_currency_name():
+    while True:
+        currency_name = input("Enter The currency name CODE (e.g., INR, USD): ").upper()
+        if is_valid_currency_name(currency_name):
+            return currency_name
+        else:
+            print("Invalid currency code. Please try again...")
+
+# Example usage:
+currency_code = add_currency_name()
+print(f"You entered a valid currency code: {currency_code}")
+
+# Example usage of the get_currency_key function
+user_input = input("Enter a currency name: ")
+key = get_currency_key(user_input)
+if key:
+    print(f"The currency code for '{user_input}' is '{key}'.")
+else:
+    print(f"'{user_input}' not found in the dictionary.")
+
 
 
 
