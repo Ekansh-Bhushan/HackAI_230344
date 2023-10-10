@@ -10,22 +10,10 @@ import requests
 import pandas as pd
 import smtplib
 from email.mime.text import MIMEText
-import exchange_rates.csv
-from database import get_email 
 import json
 import config
+import csv
 
-print("""Connecting to the server...
-Secure connection established.\n\n\n\n""")
-
-mydb = my.connect(host='localhost', user='root', passwd=config.MYSQL_PASSWORD, autocommit=True)
-mycursor = mydb.cursor()
-mycursor.execute("Create Database if not exists HackAI")
-print("CHECKING AND CREATING DATABASE...")
-mycursor.execute("use HackAI")
-print("DATABASE CREATED AND CHECKED SUCCESSFULLY.\n\n\n\n\n\n\n")
-
-SEED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_1234567890#"
 
 # DEFINING CLASS
 
@@ -60,7 +48,6 @@ class User:
     def __init__(self):
         self.api_key = open('user.txt').readline().strip()
         self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
-        # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
         self.output = ''
         self.file_name = datetime.now().strftime('%d %b - %Y')
         print(self.file_name)
@@ -202,7 +189,7 @@ def set_currency_thresholds():
                 print(f"ALERT: Exchange rate for {currency} has surpassed the threshold of {threshold}")
         time.sleep(60)  # Poll every minute
 
-
+"""
 
 '''This code defines three functions (is_valid_username, is_valid_password, and is_valid_email) to 
 check the validity of the username, password, and email using regular expressions. 
@@ -218,8 +205,17 @@ api_key = open('api_key.txt').readline().strip()
 # Define the base currency (EUR)
 base_currency = 'EUR'
 
+with open('exchange_rates.csv', mode ='r')as file:
+   
+  # reading the CSV file
+  csvFile = csv.reader(file)
+ 
+  # displaying the contents of the CSV file
+  for lines in csvFile:
+        print(lines)
 # Load currency data from the CSV file
-currency_data = pd.read_csv('exchange_rates.csv')
+# currency_data = pd.read_csv('exchange_rates.csv')
+
 
 # Function to fetch exchange rates from the API
 def get_exchange_rates():
@@ -313,3 +309,5 @@ if __name__ == '__main__':
 
 if __name__ == "__main__":
     main()
+
+    """
