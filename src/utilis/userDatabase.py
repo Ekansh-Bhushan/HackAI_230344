@@ -131,9 +131,12 @@ def add_currency_name():
         else:
             print("Invalid currency code. Please try again...")
 
-# Example usage:
-currency_code = add_currency_name()
-print(f"You entered a valid currency code: {currency_code}")
+def valid_currency():
+    currency_code = add_currency_name()
+    if currency_code:
+        print(f"You entered a valid currency code: {currency_code}")
+    else:
+        print("No valid currency code entered.")
 
 
 
