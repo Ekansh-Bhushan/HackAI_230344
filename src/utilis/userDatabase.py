@@ -1,13 +1,13 @@
-from uagents import Agent, Context
+
 import re
 from datetime import datetime, date
 from random import choice as r_c
 import mysql.connector as my
 from tabulate import tabulate
-from forex_python.converter import CurrencyRates
+
 import time
-import requests
-import pandas as pd
+
+
 import smtplib
 from email.mime.text import MIMEText
 import json
@@ -103,67 +103,139 @@ def get_dob():
         else:
             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
+# opening the CSV file
+with open('C:/Users/Ekansh/code/HackAI/exchange_rates.csv', mode ='r')as file:
+   
+  # reading the CSV file
+  csvFile = csv.reader(file)
+  dicti ={}
+  # displaying the contents of the CSV file
+  for lines in csvFile:
+        acronym = lines[0].strip()  # Assuming acronyms are in the first column
+        full_form = lines[1].strip()  # Assuming full forms are in the second column
+        dicti[acronym]=full_form
 
 
-# creating tables 
 
-def create_user_table():
-    try:
-        query = ''' create table if not exists USER (ID varchar(10) not null,
-UNAME varchar(20) not null, EMAIL varchar(200), PASSWORD varchar(50),UDOB date)'''
-        mycursor.execute(query)
-    except Exception as e:
-        print(e)
+def is_valid_currency_name(currency_name):
+    if len(currency_name) == 3 and dicti[currency_name]== :
+        return currency_name
+    else :
+        return False
 
-def add_user():
-    try:
-        while True:
-            pid = random_id()
-            name = get_user_name()
-            email = get_user_email()
-            password = get_user_pasword()
-            udob = get_dob()
-            query = f"""insert into USER values ('{pid}','{name}','{email}','{password}','{udob}')"""
-            mycursor.execute(query)
-            ans = input('Want To Enter More? (Y/N) :  ')
-            if ans in 'Nn':
-                print('User Was Added Successfully!')
-                break
-    except Exception as e:
-        print(e)
-
-
-def display_user():
-    try:
-        mycursor.execute("select * from USER")
-        myrecords = mycursor.fetchall()
-        if mycursor.rowcount != 0:
-            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
+def add_currency_name():
+    while True:
+        currency_name = input("Enter The currency name CODE (three letter example INR USD) : ").title()
+        if is_valid_email(currency_name):
+            return currency_name
         else:
-            print('Add USER to see them!')
-    except Exception as e:
-        print(e)
+            print("Invalid currency code .\nTry Again...")
 
-def search_user():
-    try:
-        sid = input('Enter The User ID  :  ')
-        query = f"select * from USER where ID = '{sid}'"
-        mycursor.execute(query)
-        myrecords = mycursor.fetchall()
-        if mycursor.rowcount != 0:
-            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
-        else:
-            print('No User With Such ID Found! Check the ID and Try Again!')
-    except Exception as E:
-        print("Add User to see them!")
+def threshold():
+    while
+# # creating tables 
 
-def del_user(pid):
-    query = f"select * from USER where id  = '{pid}'"
-    mycursor.execute(query)
-    myrecords = mycursor.fetchall()
-    if mycursor.rowcount != 0:
-        query = f"delete from USER where id = '{pid}'"
-        mycursor.execute(query)
-        print("The user is deleted from database.")
-    else:
-        print("Error! No USER was found")
+# def create_user_table():
+#     try:
+#         query = ''' create table if not exists USER (ID varchar(10) not null,
+# UNAME varchar(20) not null, EMAIL varchar(200), PASSWORD varchar(50),UDOB date)'''
+#         mycursor.execute(query)
+#     except Exception as e:
+#         print(e)
+
+# def add_user():
+#     try:
+#         while True:
+#             pid = random_id()
+#             name = get_user_name()
+#             email = get_user_email()
+#             password = get_user_pasword()
+#             udob = get_dob()
+#             query = f"""insert into USER values ('{pid}','{name}','{email}','{password}','{udob}')"""
+#             mycursor.execute(query)
+#             ans = input('Want To Enter More? (Y/N) :  ')
+#             if ans in 'Nn':
+#                 print('User Was Added Successfully!')
+#                 print("User will get notification on email whenever currency rates goes below the threshold value")
+#                 break
+#     except Exception as e:
+#         print(e)
+
+
+# def display_user():
+#     try:
+#         mycursor.execute("select * from USER")
+#         myrecords = mycursor.fetchall()
+#         if mycursor.rowcount != 0:
+#             print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
+#         else:
+#             print('Add USER to see them!')
+#     except Exception as e:
+#         print(e)
+
+# def search_user():
+#     try:
+#         sid = input('Enter The User ID  :  ')
+#         query = f"select * from USER where ID = '{sid}'"
+#         mycursor.execute(query)
+#         myrecords = mycursor.fetchall()
+#         if mycursor.rowcount != 0:
+#             print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
+#         else:
+#             print('No User With Such ID Found! Check the ID and Try Again!')
+#     except Exception as E:
+#         print("Add User to see them!")
+
+# def del_user(pid):
+#     query = f"select * from USER where id  = '{pid}'"
+#     mycursor.execute(query)
+#     myrecords = mycursor.fetchall()
+#     if mycursor.rowcount != 0:
+#         query = f"delete from USER where id = '{pid}'"
+#         mycursor.execute(query)
+#         print("The user is deleted from database.")
+#     else:
+#         print("Error! No USER was found")
+
+
+# def choice():
+#     try:
+#         while True:
+#             b = int(input("""\n\n
+#   +----------+------------------------+  
+#   |  Press   |          For           |
+#   +----------+------------------------+
+#   |    1     |       All USER info    |
+#   |    2     |       Add new USER     |
+#   |    3     |       Remove a USER    |
+#   |    4     |       search USER      |
+#   |    5     |       Exit             |
+#   +----------+------------------------+
+#     Your Choice   :  """))
+#             if b == 1:
+#                 display_user()
+#             elif b == 2:
+#                 create_user_table()
+#                 add_user()
+#                 display_user()
+#             elif b == 3:
+#                 del_user()
+#                 display_user()
+#             elif b == 4:
+#                 search_user()
+#             elif b == 5:
+#                 s = input("Are you sure you want to Exit to MAIN MENU? (y/n)  :  ").lower()
+#                 if s in 'y':
+#                     print("SAVING AND EXITING")
+#                     break
+#                 elif s not in 'yn':
+#                     print("Write y/n")
+#             else:
+#                 print('Invalid Choice. \nCheck Your Response! ')
+#     except ValueError as e:
+#         print(e, "\n Please enter a Valid 'Number' from above.")
+
+# def userDatabase():
+#     print("""
+#         WELCOME TO CURRENCY EXCHANGE MONITOR & ALERT PLATFORM 
+#     """)
