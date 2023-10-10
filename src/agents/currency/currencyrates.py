@@ -1,25 +1,27 @@
 import requests
 from datetime import datetime
 import json
+import csv
 # from uagents import Agent, Context
 
 # from uagents import Agent, Context
 
 class Currency:
     def __init__(self):
-        self.api_key = open('api_key.txt').readline().strip()
+        self.api_key = open('C:/Users/Ekansh/code/HackAI/src/agents/currency/api_key.txt').readline().strip()
         self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
         # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
         self.output = ''
         self.file_name = datetime.now().strftime('%d %b - %Y')
         print(self.file_name)
 
+
     def do_request(self):
         res = requests.get(self.url)
         if res.status_code == 200:
             res_json = res.json()
-            self.output = res_json['rates']['USD']
-
+            self.output = res_json['rates']
+            return self.output
     # agent= Agent(name="agent", seed="agent recovery phase")
     # @agent.on_interval(period=84600)
     # async def currency_update(ctx: Context):
@@ -35,7 +37,11 @@ class Currency:
     
 # agent.run()
 
+def currency_rate_get():
 
-c = Currency()
-c.do_request()
-c.write_to_file()
+    c = Currency()
+    global dicti 
+    dicti = c.do_request()
+    # c.write_to_file()
+    # dicti = {}
+    return dicti
