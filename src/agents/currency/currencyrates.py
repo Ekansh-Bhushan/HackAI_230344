@@ -1,15 +1,12 @@
 import requests
 from datetime import datetime
 import json
-from uagents import Agent, Context
-
 # from uagents import Agent, Context
 
 
 def __init__(self):
     self.api_key = open('api_key.txt').readline().strip()
     self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
-    # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
     self.output = ''
     self.file_name = datetime.now().strftime('%d %b - %Y')
     print(self.file_name)
@@ -20,10 +17,10 @@ def do_request(self):
         res_json = res.json()
         self.output = res_json['rates']['USD']
 
-agent= Agent(name="agent", seed="agent recovery phase")
-@agent.on_interval(period=84600)
-async def currency_update(ctx: Context):
-    ctx.logger.info(f'The current rate today is {self.output}')
+# agent= Agent(name="agent", seed="agent recovery phase")
+# @agent.on_interval(period=84600)
+# async def currency_update(ctx: Context):
+#     ctx.logger.info(f'The current rate today is {self.output}')
 def write_to_file(self):
     tday = datetime.now().strftime('%Y-%m-%d')
     # print(tday)
@@ -33,7 +30,7 @@ def write_to_file(self):
     # print(self)
 
     
-agent.run()
+# agent.run()
 
 
 # c = Currency()
