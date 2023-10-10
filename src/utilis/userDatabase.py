@@ -146,23 +146,7 @@ else:
 
 
 
-def is_valid_currency_name(currency_name):
-    if len(currency_name) == 3 and dicti[currency_name]== :
-        return currency_name
-    else :
-        return False
 
-def add_currency_name():
-    while True:
-        currency_name = input("Enter The currency name CODE (three letter example INR USD) : ").title()
-        if is_valid_email(currency_name):
-            return currency_name
-        else:
-            print("Invalid currency code .\nTry Again...")
-
-add_currency_name()
-# def threshold():
-#     while
 # # creating tables 
 
 # def create_user_table():
