@@ -1,51 +1,40 @@
 import csv
 import requests
-
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart  # Import MIMEMultipart for sending emails
 from database import get_email  # Import the function from your database.py
-import csv
 
 # Define your API endpoint and API key
-api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
 api_key = open('api_key.txt').readline().strip()
+api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={api_key}'  # Move the API URL after defining api_key
 
 # Define the base currency (EUR)
 base_currency = 'EUR'
-
-import csv
 
 # Specify the file path to your CSV file
 csv_file_path = 'exchangerates.csv'
 
 try:
     with open(csv_file_path, mode='r', newline='') as file:
-        reader = csv.reader(file)
+        reader = csv.DictReader(file)  # Use DictReader to read CSV as a dictionary
         for row in reader:
-            # Each row is a list of values from the CSV file
-            print(row)
+            # Access values by column name (header)
+            currency_code = row['Currency Code']
+            threshold = float(row['Threshold'])  # Convert threshold to float
+            email_address = row['Email Address']
+            # Print or process these values as needed
+            print(f"Currency Code: {currency_code}, Threshold: {threshold}, Email Address: {email_address}")
     print("CSV file has been successfully read.")
 except FileNotFoundError:
     print(f"The file '{csv_file_path}' was not found.")
 except Exception as e:
     print(f"An error occurred while reading the file '{csv_file_path}': {e}")
 
-
 # Function to fetch exchange rates from the API
 def get_exchange_rates():
     params = {
         'base': base_currency,
-        'apiKey': api_key,
-    }
-    response = requests.get(api_url, params=params)
-    data = response.json()
-    return data['rates']
-
-# Function to fetch exchange rates from the API
-def get_exchange_rates():
-    params = {
-        'base': base_currency,
-        'apiKey': api_key,
     }
     try:
         response = requests.get(api_url, params=params)
@@ -93,22 +82,23 @@ def main():
         print("Exiting due to API request error.")
         return
     
-    for index, row in currency_data.iterrows():
-        currency_code = row['Currency Code']
-        threshold = row['Threshold']
-        
-        if currency_code in exchange_rates:
-            exchange_rate = exchange_rates[currency_code]
+    with open(csv_file_path, mode='r', newline='') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            currency_code = row['Currency Code']
+            threshold = float(row['Threshold'])
+            email_address = row['Email Address']
             
-            if exchange_rate > threshold:
-                email_address = row['Email Address']
-                send_alert(email_address, currency_code, exchange_rate, threshold)
+            if currency_code in exchange_rates:
+                exchange_rate = exchange_rates[currency_code]
+                
+                if exchange_rate > threshold:
+                    send_alert(email_address, currency_code, exchange_rate, threshold)
 
 if __name__ == '__main__':
     print("Currency exchange monitor started.")
     main()
     print("Currency exchange monitor finished.")
-
 
 
 
