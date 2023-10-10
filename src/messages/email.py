@@ -1,3 +1,4 @@
 import smtplib as s
 
-ob = s.SMTP()
+ob = s.SMTP("smpt.gmail.com",578)
+
