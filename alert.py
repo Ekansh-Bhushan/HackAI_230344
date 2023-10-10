@@ -1,9 +1,9 @@
 import requests
-import pandas as pd
+
 import smtplib
 from email.mime.text import MIMEText
-import csv
 from database import get_email  # Import the function from your database.py
+import csv
 
 # Define your API endpoint and API key
 api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
@@ -12,8 +12,23 @@ api_key = open('api_key.txt').readline().strip()
 # Define the base currency (EUR)
 base_currency = 'EUR'
 
-# Load currency data from the CSV file
-currency_data = pd.read_csv('exchange_rates.csv')
+import csv
+
+# Specify the file path to your CSV file
+csv_file_path = 'exchangerates.csv'
+
+try:
+    with open(csv_file_path, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            # Each row is a list of values from the CSV file
+            print(row)
+    print("CSV file has been successfully read.")
+except FileNotFoundError:
+    print(f"The file '{csv_file_path}' was not found.")
+except Exception as e:
+    print(f"An error occurred while reading the file '{csv_file_path}': {e}")
+
 
 # Function to fetch exchange rates from the API
 def get_exchange_rates():
