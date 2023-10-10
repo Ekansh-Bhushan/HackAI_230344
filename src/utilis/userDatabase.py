@@ -135,13 +135,7 @@ def add_currency_name():
 currency_code = add_currency_name()
 print(f"You entered a valid currency code: {currency_code}")
 
-# Example usage of the get_currency_key function
-user_input = input("Enter a currency name: ")
-key = get_currency_key(user_input)
-if key:
-    print(f"The currency code for '{user_input}' is '{key}'.")
-else:
-    print(f"'{user_input}' not found in the dictionary.")
+
 
 
 
