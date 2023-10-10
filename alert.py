@@ -1,8 +1,8 @@
+import csv
 import requests
 import pandas as pd
 import smtplib
 from email.mime.text import MIMEText
-# import exchange_rates.csv
 from database import get_email  # Import the function from your database.py
 
 # Define your API endpoint and API key
