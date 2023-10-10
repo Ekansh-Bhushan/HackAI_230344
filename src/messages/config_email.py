@@ -1,2 +1,2 @@
-SENDER_MAIL = "ekanshbhushan@gmail.com"
+SENDER_MAIL = ""
 SENDER_MAIL_PASSWORD = ""
