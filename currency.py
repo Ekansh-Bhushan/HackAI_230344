@@ -26,13 +26,13 @@ class Currency:
             json.dump(temp_dict, f)
         # print(self)
 
-# agent= Agent(name="agent", seed="agent recovery phase")
-# @agent.on_interval(period=84600)
-# async def currency_update(ctx: Context):
-#     ctx.logger.info(f'The current rate today is {self.output}')
+agent= Agent(name="agent", seed="agent recovery phase")
+@agent.on_interval(period=84600)
+async def currency_update(ctx: Context):
+    ctx.logger.info(f'The current rate today is {self.output}')
     
-# if _name=="__main_":
-#     agent.run()
+if _name=="__main_":
+    agent.run()
 
 
 c = Currency()

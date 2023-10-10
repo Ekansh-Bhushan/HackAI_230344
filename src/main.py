@@ -5,12 +5,18 @@ import mysql.connector as my
 from tabulate import tabulate
 from forex_python.converter import CurrencyRates
 import time
-
+import requests
+import pandas as pd
+import smtplib
+from email.mime.text import MIMEText
+import exchange_rates.csv
+from database import get_email  # Import the function from your database.py
+from uagents import Agent, Context
 
 print("""Connecting to the server...
 Secure connection established.\n\n\n\n""")
 
-mydb = my.connect(host='localhost', user='root', passwd='password', autocommit=True)
+mydb = my.connect(host='localhost', user='root', passwd='Ekansh@04', autocommit=True)
 mycursor = mydb.cursor()
 mycursor.execute("Create Database if not exists HackAI")
 print("CHECKING AND CREATING DATABASE...")
@@ -55,6 +61,11 @@ def is_valid_email(email):
         print("Invalid email address. Please enter a valid email address.")
         return False
 
+def is_validate_date(date):
+    fields = date.split("-")
+    contains_all_fields = len(fields) == 3
+    all_fields_are_integers = all([field.isdigit() for field in fields])
+    return contains_all_fields and all_fields_are_integers
 
 def get_dob():
     while True:
@@ -71,20 +82,6 @@ def get_dob():
         else:
             print("Your Answer Might Not Be In The Mentioned Date Format, Try That Again...")
 
-
-def main():
-    username = input("Enter a username: ")
-    password = input("Enter a password: ")
-    email = input("Enter an email address: ")
-    dob = input("Enter your date of birth (YYYY-MM-DD): ")
-
-    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email) and is_valid_dob(dob):
-        print("Valid input.")
-    else:
-        print("Invalid input. Please check your details and try again.")
-
-if __name__ == "__main__":
-    main()
 
 def currency_converter():
     c = CurrencyRates()
@@ -111,9 +108,6 @@ def currency_converter():
             print(f"{converted_amount:.2f} {foreign_currency}")
     else:
         print("No valid foreign currencies provided.")
-
-if __name__ == "__main__":
-    currency_converter()
 
 
 
@@ -155,43 +149,13 @@ def set_currency_thresholds():
                 print(f"ALERT: Exchange rate for {currency} has surpassed the threshold of {threshold}")
         time.sleep(60)  # Poll every minute
 
-if __name__ == "__main__":
-    set_currency_thresholds()
+
 
 '''This code defines three functions (is_valid_username, is_valid_password, and is_valid_email) to 
 check the validity of the username, password, and email using regular expressions. 
 The main function takes user input for these three fields and checks their validity. 
 If all fields are valid, it prints "Valid input." Otherwise, it prints "Invalid input."'''
 
-
-
-
-
-
-
-# def is_valid_gender(gender):
-#     accepted_genders = ['male', 'female', 'others']
-#     return gender in accepted_genders
-
-
-# def get_gender():
-#     while True:
-#         gender = input('Enter the gender (Male,Female,Others)  :  ').lower()
-#         if is_valid_gender(gender):
-#             return gender
-#         else:
-#             print('The Gender Is Not Valid.')
-
-
-
-#----------------------------------------------------------i checked till here as of now ------------------------------
-
-import requests
-import pandas as pd
-import smtplib
-from email.mime.text import MIMEText
-import exchange_rates.csv
-from database import get_email  # Import the function from your database.py
 
 # Define your API endpoint and API key
 api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
@@ -202,16 +166,6 @@ base_currency = 'EUR'
 
 # Load currency data from the CSV file
 currency_data = pd.read_csv('exchange_rates.csv')
-
-# Function to fetch exchange rates from the API
-def get_exchange_rates():
-    params = {
-        'base': base_currency,
-        'apiKey': api_key,
-    }
-    response = requests.get(api_url, params=params)
-    data = response.json()
-    return data['rates']
 
 # Function to fetch exchange rates from the API
 def get_exchange_rates():
@@ -244,7 +198,7 @@ def send_alert(email_address, currency_code, exchange_rate, threshold):
     
     smtp_server = 'smtp.gmail.com'  # Use your SMTP server
     smtp_port = 587  # Use your SMTP port
-    smtp_username = 'your_email@gmail.com'  # Replace with your email address
+    smtp_username = 'sender_email@gmail.com'  # Replace with your email address
     smtp_password = 'your_email_password'  # Replace with your email password
     
     try:
@@ -276,6 +230,11 @@ def main():
                 email_address = row['Email Address']
                 send_alert(email_address, currency_code, exchange_rate, threshold)
 
+
+if __name__ == "__main__":
+    set_currency_thresholds()
+
+# upar likha hua tha code     
 if __name__ == '__main__':
     print("Currency exchange monitor started.")
     main()
@@ -286,3 +245,17 @@ if __name__ == '__main__':
 
 
 
+
+def main():
+    username = input("Enter a username: ")
+    password = input("Enter a password: ")
+    email = input("Enter an email address: ")
+    dob = input("Enter your date of birth (YYYY-MM-DD): ")
+
+    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email) and is_valid_dob(dob):
+        print("Valid input.")
+    else:
+        print("Invalid input. Please check your details and try again.")
+
+if __name__ == "__main__":
+    main()
