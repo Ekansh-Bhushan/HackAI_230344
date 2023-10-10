@@ -157,7 +157,7 @@ def input_threshold_values():
 
     return thresholds
 
-# Example usage:
+
 thresholds = input_threshold_values()
 
 print("Threshold values:")
