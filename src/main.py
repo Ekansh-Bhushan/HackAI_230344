@@ -1,3 +1,4 @@
+from uagents import Agent, Context
 import re
 from datetime import datetime, date
 from random import choice as r_c
@@ -10,13 +11,14 @@ import pandas as pd
 import smtplib
 from email.mime.text import MIMEText
 import exchange_rates.csv
-from database import get_email  # Import the function from your database.py
-from uagents import Agent, Context
+from database import get_email 
+import json
+import config
 
 print("""Connecting to the server...
 Secure connection established.\n\n\n\n""")
 
-mydb = my.connect(host='localhost', user='root', passwd='Ekansh@04', autocommit=True)
+mydb = my.connect(host='localhost', user='root', passwd=config.MYSQL_PASSWORD, autocommit=True)
 mycursor = mydb.cursor()
 mycursor.execute("Create Database if not exists HackAI")
 print("CHECKING AND CREATING DATABASE...")
@@ -25,6 +27,57 @@ print("DATABASE CREATED AND CHECKED SUCCESSFULLY.\n\n\n\n\n\n\n")
 
 SEED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_1234567890#"
 
+# DEFINING CLASS
+
+class Currency:
+    def __init__(self):
+        self.api_key = open('api_key.txt').readline().strip()
+        self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
+        # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
+        self.output = ''
+        self.file_name = datetime.now().strftime('%d %b - %Y')
+        print(self.file_name)
+
+    def do_request(self):
+        res = requests.get(self.url)
+        if res.status_code == 200:
+            res_json = res.json()
+            self.output = res_json['rates']['USD']
+
+    def write_to_file(self):
+        tday = datetime.now().strftime('%Y-%m-%d')
+        # print(tday)
+        temp_dict = {tday: self.output}
+        with open(f"daily_price/{self.file_name}.txt", 'w') as f :
+            json.dump(temp_dict, f)
+        # print(self)
+        agent= Agent(name="agent", seed="agent recovery phase")
+        @agent.on_interval(period=84600)
+        async def currency_update(ctx: Context):
+            ctx.logger.info(f'The current rate today is {self.output}')
+
+class User:
+    def __init__(self):
+        self.api_key = open('user.txt').readline().strip()
+        self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
+        # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
+        self.output = ''
+        self.file_name = datetime.now().strftime('%d %b - %Y')
+        print(self.file_name)
+
+    def do_request(self):
+        res = requests.get(self.url)
+        if res.status_code == 200:
+            res_json = res.json()
+            self.output = res_json['rates']['USD']
+
+    def write_to_file(self):
+        tday = datetime.now().strftime('%Y-%m-%d')
+        # print(tday)
+        temp_dict = {tday: self.output}
+        with open(f"daily_price/{self.file_name}.txt", 'w') as f :
+            json.dump(temp_dict, f)
+        # print(self)
 
 # DEFINING FUNCTIONS
 
@@ -158,8 +211,9 @@ If all fields are valid, it prints "Valid input." Otherwise, it prints "Invalid 
 
 
 # Define your API endpoint and API key
-api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
+api_url = f'http://api.exchangeratesapi.io/v1/latest?access_key={config.API_KEY}'
 api_key = open('api_key.txt').readline().strip()
+
 
 # Define the base currency (EUR)
 base_currency = 'EUR'
@@ -189,17 +243,17 @@ def send_alert(email_address, currency_code, exchange_rate, threshold):
     
     msg = MIMEMultipart()
     msg['Subject'] = subject
-    msg['From'] = 'your_email@gmail.com'  # Replace with your email address
+    msg['From'] = config.SENDER_MAIL  # Replace with your email address
     msg['To'] = email_address
     
     # Create a plain text message
     text_message = MIMEText(message)
     msg.attach(text_message)
     
-    smtp_server = 'smtp.gmail.com'  # Use your SMTP server
-    smtp_port = 587  # Use your SMTP port
-    smtp_username = 'sender_email@gmail.com'  # Replace with your email address
-    smtp_password = 'your_email_password'  # Replace with your email password
+    smtp_server = config.SMTP_SERVER
+    smtp_port = config.SMTP_PORT
+    smtp_username = config.SENDER_MAIL
+    smtp_password = config.SENDER_MAIL_PASSWORD  
     
     try:
         server = smtplib.SMTP(smtp_server, smtp_port)
@@ -211,6 +265,16 @@ def send_alert(email_address, currency_code, exchange_rate, threshold):
     except smtplib.SMTPException as e:
         print(f"Failed to send email alert to {email_address}: {e}")
 
+def input_from_user():
+    username = input("Enter a username: ")
+    password = input("Enter a password: ")
+    email = input("Enter an email address: ")
+    dob = input("Enter your date of birth (YYYY-MM-DD): ")
+
+    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email) and is_validate_date(dob):
+        print("Valid input.")
+    else:
+        print("Invalid input. Please check your details and try again.")
 # Main function
 def main():
     exchange_rates = get_exchange_rates()
@@ -246,16 +310,6 @@ if __name__ == '__main__':
 
 
 
-def main():
-    username = input("Enter a username: ")
-    password = input("Enter a password: ")
-    email = input("Enter an email address: ")
-    dob = input("Enter your date of birth (YYYY-MM-DD): ")
-
-    if is_valid_username(username) and is_valid_password(password) and is_valid_email(email) and is_valid_dob(dob):
-        print("Valid input.")
-    else:
-        print("Invalid input. Please check your details and try again.")
 
 if __name__ == "__main__":
     main()

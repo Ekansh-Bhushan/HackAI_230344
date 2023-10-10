@@ -1,16 +1,22 @@
 [tool.poetry]
 name = "hackai"
 version = "0.1.0"
-description = "a project for giving alerts for currency exchange"
+description = ""
 authors = ["Ekansh <ekanshbhushan2k22@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.11"
+python = "^3.11"
 requests = "^2.31.0"
+datetime = "^5.2"
+tabulate = "^0.9.0"
 user-agents = "^2.2.0"
 mysql-connector-python = "^8.1.0"
-tabulate = "^0.9.0"
+forex-python = "^1.8"
+secure-smtplib = "^0.1.1"
+regex = "^2023.10.3"
+random2 = "^1.0.1"
+email-to = "^0.1.0"
 
 
 [build-system]
