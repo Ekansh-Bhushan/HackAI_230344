@@ -160,8 +160,9 @@ def add_currency_name():
         else:
             print("Invalid currency code .\nTry Again...")
 
-def threshold():
-    while
+add_currency_name()
+# def threshold():
+#     while
 # # creating tables 
 
 # def create_user_table():
