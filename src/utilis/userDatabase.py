@@ -138,10 +138,14 @@ def valid_currency():
     else:
         print("No valid currency code entered.")
 
-def input_threshold_values(selected_currencies):
-    thresholds = {}  # Dictionary to store threshold values for selected currencies
+def input_threshold_values():
+    thresholds = {}  # Dictionary to store threshold values for currencies
 
-    for currency in selected_currencies:
+    while True:
+        currency = input("Enter a currency code (or 'done' to finish): ").upper()
+        if currency == 'DONE':
+            break
+
         while True:
             threshold_str = input(f"Enter the threshold value for {currency}: ")
             try:
@@ -154,8 +158,7 @@ def input_threshold_values(selected_currencies):
     return thresholds
 
 # Example usage:
-selected_currencies = ["USD", "EUR", "GBP"]  # Replace with the currencies selected by the user
-thresholds = input_threshold_values(selected_currencies)
+thresholds = input_threshold_values()
 
 print("Threshold values:")
 for currency, threshold in thresholds.items():
