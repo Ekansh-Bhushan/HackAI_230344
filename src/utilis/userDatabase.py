@@ -112,6 +112,7 @@ with open('C:/Users/Ekansh/code/HackAI/exchange_rates.csv', mode='r') as file:
         full_form = lines[1].strip()  # Assuming full forms are in the second column
         dicti[acronym] = full_form
 
+# checking is currency name enter by the user is valid 
 def is_valid_currency_name(currency_name):
     # Check if the currency code is in the dictionary
     return currency_name in dicti
