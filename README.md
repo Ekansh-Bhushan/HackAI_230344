@@ -22,12 +22,14 @@ DESCRIPTION OF THE PROJECT:
 
 INSTRUCTIONS TO RUN THE PROJECT:
 -To create a poetry env.
--Create a file of the API key
--Enter sender's email id ,email password,username
--Enter Mysql password 
+-Create a file of the API key (api_.txt) in the folder currency in agents in src
+-Enter sender's email id ,email password in config_email.py
+-Enter Mysql password in congif.py file
 -Need to create an application password.
 -two step verification.
 -enable less secure app settings.
+- add app passwrod in config_email.py
+
 
 SPECIAL CONSIDERATIONS(IF ANY):
 ![Alt text](image.png)
