@@ -14,6 +14,9 @@ INSTRUCTIONS TO RUN THE PROJECT:
 -Create a file of the API key
 -Enter sender's email id ,email password,username
 -Enter Mysql password 
+-Need to create an application password.
+-two step verification.
+-enable less secure app settings.
 
 SPECIAL CONSIDERATIONS(IF ANY):
 
