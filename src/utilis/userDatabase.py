@@ -139,31 +139,17 @@ def valid_currency():
     else:
         print("No valid currency code entered.")
 
+
 def input_threshold_values():
-    thresholds = {}  # Dictionary to store threshold values for currencies
-
-    while True:
-        currency = input("Enter a currency code (or 'done' to finish): ").upper()
-        if currency == 'DONE':
-            break
-
         while True:
-            threshold_str = input(f"Enter the threshold value for {currency}: ")
-            try:
+            threshold_str = input(f"Enter the threshold value: ")
+            if threshold_str.isdigit():
                 threshold = float(threshold_str)
-                thresholds[currency] = threshold
-                break
-            except ValueError:
+                return threshold
+            else:
                 print("Invalid input. Please enter a valid numerical threshold.")
 
-    return thresholds
-
-
-thresholds = input_threshold_values()
-
-print("Threshold values:")
-for currency, threshold in thresholds.items():
-    print(f"{currency}: {threshold}")
+        
 
 
 
@@ -172,7 +158,7 @@ for currency, threshold in thresholds.items():
 def create_user_table():
     try:
         query = ''' create table if not exists USER (ID varchar(10) not null,
-UNAME varchar(20) not null, EMAIL varchar(200), PASSWORD varchar(50),UDOB date)'''
+UNAME varchar(20) not null, EMAIL varchar(200), PASSWORD varchar(50),UDOB date,CURRENCY varchar(10),THRESHHOLD decimal)'''
         mycursor.execute(query)
     except Exception as e:
         print(e)
@@ -185,7 +171,9 @@ def add_user():
             email = get_user_email()
             password = get_user_pasword()
             udob = get_dob()
-            query = f"""insert into USER values ('{pid}','{name}','{email}','{password}','{udob}')"""
+            currency = add_currency_name()
+            threshold = input_threshold_values()
+            query = f"""insert into USER values ('{pid}','{name}','{email}','{password}','{udob}','{currency}',{threshold})"""
             mycursor.execute(query)
             ans = input('Want To Enter More? (Y/N) :  ')
             if ans in 'Nn':
@@ -201,7 +189,7 @@ def display_user():
         mycursor.execute("select * from USER")
         myrecords = mycursor.fetchall()
         if mycursor.rowcount != 0:
-            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
+            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob','currency','threshold'] , tablefmt = 'fancy_grid' ))
         else:
             print('Add USER to see them!')
     except Exception as e:
@@ -214,7 +202,7 @@ def search_user():
         mycursor.execute(query)
         myrecords = mycursor.fetchall()
         if mycursor.rowcount != 0:
-            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob'] , tablefmt = 'fancy_grid' ))
+            print(tabulate(myrecords, headers = ['id', 'name',  'email', 'password', 'udob','currency','threshold'] , tablefmt = 'fancy_grid' ))
         else:
             print('No User With Such ID Found! Check the ID and Try Again!')
     except Exception as E:
@@ -231,7 +219,32 @@ def del_user(pid):
     else:
         print("Error! No USER was found")
 
+def send_user_currency(pid):
+    query = f"select currency from USER where id = '{pid}"
+    mycursor.execute(query)
+    myrecords = mycursor.fetchall()
+    if mycursor.rowcount != 0:
+        return myrecords[0]
+    else:
+        print("Error! No USER was found")
 
+def user_email(pid):
+    query = f"select email from USER where id = '{pid}"
+    mycursor.execute(query)
+    myrecords = mycursor.fetchall()
+    if mycursor.rowcount != 0:
+        return myrecords[0]
+    else:
+        print("Error! No USER was found")
+
+def send_user_threshold(pid):
+    query = f"select threshold from USER where id = '{pid}"
+    mycursor.execute(query)
+    myrecords = mycursor.fetchall()
+    if mycursor.rowcount != 0:
+        return myrecords[0]
+    else:
+        print("Error! No USER was found")
 def choice():
     try:
         while True:
@@ -258,7 +271,7 @@ def choice():
             elif b == 4:
                 search_user()
             elif b == 5:
-                s = input("Are you sure you want to Exit to MAIN MENU? (y/n)  :  ").lower()
+                s = input("Are you sure you want to Exit ? (y/n)  :  ").lower()
                 if s in 'y':
                     print("SAVING AND EXITING")
                     break
@@ -273,3 +286,4 @@ def userDatabase():
     print("""
         WELCOME TO CURRENCY EXCHANGE MONITOR & ALERT PLATFORM 
     """)
+
