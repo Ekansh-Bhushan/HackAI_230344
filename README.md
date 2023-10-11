@@ -2,12 +2,23 @@
 PROJECT NAME:CuRRENCY EXCHANGE MONITOR AND ALERT AGENT(using uagents)
 
 DESCRIPTION OF THE PROJECT:
--The user sets the base currency(EUR by default in our project)and one or more foreign currency that they want to monitor.
--Connected to a real time currency exchange API to fetch real-time exchange rates.
--Allows user to set the threshold value for alerts for multiple foreign currencies stored as a csv file in our database.
--Storing user details using Mysql.(includes email,username,password and dob)
--Sends alerts/notification to the user when the exchange rate surpasses the threshold they have set.
--Runs the code after a specific interval of time and when it raeches above the threshold sends prompt or alert.
+1.SETS BASE CURRENCY: The user sets the base currency which is (EUR) in our project.
+
+2.SETS FOREIGN CURERNCY:The user sets one or more foreign currency in which it wants to convert.
+
+3.CONNECTS TO API:It connects to a real time api whose key and url has been provided in the code for getching the real-time exchange rates.
+
+4.SETS THRESHOLD VALUE:Inputs the threshold value from the user for the selected currencies.
+
+5.FOREIGN CURRENCIES:stores the codes and the currency name as a csv file.
+
+6.COMPARISON:Compares the currency inputted by the user with the currency code stored in the csv file.
+
+7.MYSQ:Uses mysql to stores details of the user i.e. user_email,username,password and the DOB.
+
+8.THRESHOLD PROMPAT:sends the prompt to the user when the value of the exchange rate surpasses a particular threshold using mail.
+
+9.Uagents-Runs the code after a specific interval of time and when it reaches above the threshold sends prompt or alert.
 
 INSTRUCTIONS TO RUN THE PROJECT:
 -To create a poetry env.
@@ -19,7 +30,8 @@ INSTRUCTIONS TO RUN THE PROJECT:
 -enable less secure app settings.
 
 SPECIAL CONSIDERATIONS(IF ANY):
-
+![Alt text](image.png)
+![Alt text](image-1.png)
 
 
 
