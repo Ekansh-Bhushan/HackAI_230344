@@ -11,7 +11,7 @@ from uagents import Agent, Context
 
 class Currency:
     def __init__(self):
-        self.api_key = open('C:/Users/Ekansh/code/HackAI/src/agents/currency/api_key.txt').readline().strip()
+        self.api_key = open('src/agents/currency/api_key.txt').readline().strip()
         self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}'
         # self.url = f'http://api.exchangeratesapi.io/v1/latest?access_key={self.api_key}&base=USD&symbols=GBP,EUR'
         self.output = ''

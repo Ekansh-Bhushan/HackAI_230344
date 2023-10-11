@@ -105,7 +105,7 @@ def get_dob():
 
 # Opening the CSV file and reading its contents into a dictionary
 dicti = {}
-with open('C:/Users/Ekansh/code/HackAI/exchange_rates.csv', mode='r') as file:
+with open('exchange_rates.csv', mode='r') as file:
     csvFile = csv.reader(file)
     for lines in csvFile:
         acronym = lines[0].strip()  # Assuming acronyms are in the first column
